@@ -1,0 +1,49 @@
+= Issue Due Date
+
+__DESCRIPTION__
+
+
+== Features
+
+* __FEATURE__
+
+== Getting the plugin
+
+A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-misc/files] or from {GitHub}[http://github.com/edavis10/redmine_issue_due_date]
+
+
+== Installation and Setup
+
+1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins 
+2. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
+
+== Usage
+
+The plugin should transparently set the Issue due date whenever an Issue is saved to be:
+
+* Issue due date or
+* Version due date or
+* Deliverable due date
+
+The plugin should also hook into the Version class and have it mass update all issues assigned to the Version when the Version is saved. Issues will be changed when they:
+
+* Do not have a due date or
+* Have a due date equal to the Version's old date
+
+Example:
+Version X due on 2008-01-01 with Issues A (due on 2008-01-01), Issue B (2008-02-01), and Issue C (no due date). Changing Version X's date to 2008-01-15 will update the due date of Issue A and Issue C to 2008-01-15. Issue B's due date will stay 2008-02-01.
+
+When reassigning a version, if the issue due date matched the old version date, the issue should change it's due date to match the new version.
+
+Example: if i move an issue from version A to version B and the date matches the version A, then the date should change to version B.
+
+The same behavior will be for Deliverables, if the Deliverables plugin is installed.
+
+== License
+
+This plugin is licensed under the GNU GPL v2.  See COPYRIGHT.txt and GPL.txt for details.
+
+== Project help
+
+If you need help you can contact the maintainer at the Bug Tracker.  The bug tracker is located at  https://projects.littlestreamsoftware.com
+
