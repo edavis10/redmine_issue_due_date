@@ -6,9 +6,9 @@ require 'deliverable_due_patch'
 
 require 'dispatcher'
 Dispatcher.to_prepare do
-  Issue.send(:include, IssueDueDatePatch)
-  Version.send(:include, VersionDueDatePatch)
-  Deliverable.send(:include, DeliverableDuePatch) if Object.const_defined?("Deliverable")
+  Issue.send(:include, IssueDueDate::IssuePatch)
+  Version.send(:include, IssueDueDate::VersionPatch)
+  Deliverable.send(:include, IssueDueDate::DeliverablePatch) if Object.const_defined?("Deliverable")
 end
 
 
