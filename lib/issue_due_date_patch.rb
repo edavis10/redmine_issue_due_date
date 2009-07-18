@@ -78,12 +78,11 @@ module IssueDueDate
 
       # Is the issue's +due_date+ the same as it's old version?
       def due_date_set_by_version?
-        orig_issue = Issue.find_by_id(self.id) || Issue.new
-        return false unless orig_issue.fixed_version
-        orig_date = orig_issue.fixed_version.due_date
-        orig_date ||= nil
-        
-        return orig_date == self.due_date
+        orig_issue = Issue.find_by_id(self.id)
+
+        return !!(orig_issue &&
+                  orig_issue.fixed_version &&
+                  orig_issue.fixed_version.due_date == self.due_date)
       end
       
       # Is the issue's +due_date+ the same as it's old deliverable?
