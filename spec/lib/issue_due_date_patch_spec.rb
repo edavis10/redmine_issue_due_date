@@ -11,7 +11,38 @@ describe Issue, '#update_due_date' do
 end
 
 describe Issue, '#set_due_date_from_version' do
+  before(:each) do
+    @issue = Issue.new(:id => 1000)
+  end
 
+  it 'should do nothing if the issue has no version' do
+    @issue.should_not_receive(:due_date=)
+    @issue.stub!(:fixed_version).and_return(nil)
+    @issue.set_due_date_from_version
+  end
+
+  it "should do nothing if the issue's version has no due date" do
+    @issue.should_not_receive(:due_date=)
+    @issue.stub!(:fixed_version).and_return(mock('version', :due_date => nil))
+    @issue.set_due_date_from_version
+  end
+
+  it "should do nothing if the issue's version has the same due date" do
+    today = Date.today
+    @issue.due_date = today
+    @issue.should_not_receive(:due_date=)
+    @issue.stub!(:fixed_version).and_return(mock('version', :due_date => today))
+    @issue.set_due_date_from_version
+  end
+
+  it "should set the due date of the issue to the version's if they differ" do
+    today = Date.today
+    yesterday = Date.yesterday
+    @issue.due_date = yesterday
+    @issue.should_receive(:due_date=).with(today)
+    @issue.stub!(:fixed_version).and_return(mock('version', :due_date => today))
+    @issue.set_due_date_from_version
+  end
 end
 
 describe Issue, '#set_due_date_from_deliverable' do

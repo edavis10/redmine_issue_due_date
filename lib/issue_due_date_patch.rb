@@ -56,7 +56,7 @@ module IssueDueDate
 
       # Set the +due_date+ based on the version's due_date
       def set_due_date_from_version
-        unless self.fixed_version.blank? || self.fixed_version.due_date.blank? || self.due_date == self.fixed_version.due_date
+        if fixed_version && fixed_version.due_date != due_date
           self.due_date = self.fixed_version.due_date
           return true
         else
