@@ -43,11 +43,9 @@ module IssueDueDate
 
         else
           if self.due_date_set_by_version? 
-            # If the due date is set by the version then update the due_date to the current version
-            self.due_date = self.fixed_version.due_date unless self.fixed_version.nil?
+            set_due_date_from_version
           elsif self.due_date_set_by_deliverable?
-            # If the due date is set by the deliverable then update the due_date to the current deliverable
-            self.due_date = self.deliverable.due unless self.deliverable.nil?
+            set_due_date_from_deliverable
           end
         end
 

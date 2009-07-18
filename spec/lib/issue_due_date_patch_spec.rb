@@ -7,7 +7,54 @@ describe Issue, '#before_save' do
 end
 
 describe Issue, '#update_due_date' do
+  before(:each) do
+    @issue = Issue.new
+  end
+  
+  describe "for an issue without a due date" do
+    it 'should try to set the due_date from the version' do
+      @issue.should_receive(:set_due_date_from_version)
+      @issue.update_due_date
+    end
 
+    it 'should try to set the due_date from the deliverable' do
+      @issue.should_receive(:set_due_date_from_deliverable)
+      @issue.update_due_date
+    end
+
+  end
+
+  describe "for an issue with a due date that is the same as the version" do
+    it 'should update the due_date from the version' do
+      @issue.due_date = Date.today
+      @issue.should_receive(:due_date_set_by_version?).and_return(true)
+      @issue.should_receive(:set_due_date_from_version)
+      @issue.update_due_date
+    end
+
+  end
+
+  describe "for an issue with a due date that is the same as the deliverable" do
+    it 'should update the due_date from the deliverable' do
+      @issue.due_date = Date.today
+      @issue.should_receive(:due_date_set_by_deliverable?).and_return(true)
+      @issue.should_receive(:set_due_date_from_deliverable)
+      @issue.update_due_date
+    end
+
+  end
+
+  describe "for an issue with a due date different from the version or deliverable" do
+    it 'should not change the due_date' do
+      @issue.due_date = Date.today
+      @issue.should_receive(:due_date_set_by_version?).and_return(false)
+      @issue.should_receive(:due_date_set_by_deliverable?).and_return(false)
+      @issue.should_not_receive(:set_due_date_from_version)
+      @issue.should_not_receive(:set_due_date_from_deliverable)
+      @issue.update_due_date
+    end
+
+  end
 end
 
 describe Issue, '#set_due_date_from_version' do
