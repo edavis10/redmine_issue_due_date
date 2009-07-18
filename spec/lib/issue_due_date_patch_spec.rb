@@ -9,10 +9,12 @@ end
 describe Issue, '#update_due_date' do
   before(:each) do
     @issue = Issue.new
+    @issue.stub!(:deliverable_defined?).and_return(true)
   end
   
   describe "for an issue without a due date" do
-    it 'should try to set the due_date from the version' do
+    it 'and no deliverable should try to set the due_date from the version' do
+      @issue.stub!(:deliverable_defined?).and_return(false)
       @issue.should_receive(:set_due_date_from_version)
       @issue.update_due_date
     end

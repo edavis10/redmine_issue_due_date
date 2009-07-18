@@ -14,20 +14,10 @@ module IssueDueDate
       # Updates the due date by checking the due_date set on the
       # assigned Version or Deliverable
       def update_due_date
-        
-        if self.due_date.blank?
-          # Doesn't have a due date already
-          unless self.set_due_date_from_version
-            # Try Deliverable
-            set_due_date_from_deliverable
-          end
-
-        else
-          if self.due_date_set_by_version? 
-            set_due_date_from_version
-          elsif self.due_date_set_by_deliverable?
-            set_due_date_from_deliverable
-          end
+        if deliverable_defined? && (due_date.blank? || due_date_set_by_deliverable?)
+          set_due_date_from_deliverable
+        elsif due_date.blank? || due_date_set_by_version?
+          set_due_date_from_version
         end
 
         return true
