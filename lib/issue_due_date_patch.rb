@@ -87,15 +87,12 @@ module IssueDueDate
       
       # Is the issue's +due_date+ the same as it's old deliverable?
       def due_date_set_by_deliverable?
-        return false unless deliverable_defined?
+        orig_issue = Issue.find_by_id(self.id)
 
-        orig_issue = Issue.find_by_id(self.id) || Issue.new
-        return false unless orig_issue.deliverable
-
-        orig_date = orig_issue.deliverable.due
-        orig_date ||= nil
-        
-        return orig_date == self.due_date
+        return !!(deliverable_defined? &&
+                  orig_issue &&
+                  orig_issue.deliverable &&
+                  orig_issue.deliverable.due == self.due_date)
       end
       
       # Wrapper to check for the +Deliverable+ class

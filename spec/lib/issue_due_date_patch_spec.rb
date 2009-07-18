@@ -58,7 +58,7 @@ describe Issue, '#due_date_set_by_deliverable?' do
   end
 
   describe 'without a deliverable' do
-    it 'should be false if the issue has a due date' do
+    it 'should be false' do
       @issue.stub!(:deliverable).and_return(nil)
       @issue.due_date_set_by_deliverable?.should be_false
     end
