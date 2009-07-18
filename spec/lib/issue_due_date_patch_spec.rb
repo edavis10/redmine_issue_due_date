@@ -15,6 +15,45 @@ describe Issue, '#set_due_date_from_version' do
 end
 
 describe Issue, '#set_due_date_from_deliverable' do
+  before(:each) do
+    @issue = Issue.new(:id => 1000)
+    @issue.stub!(:deliverable_defined?).and_return(true)
+  end
+  
+  it 'should do nothing if deliverable is not defined' do
+    @issue.should_not_receive(:due_date=)
+    @issue.should_receive(:deliverable_defined?).and_return(false)
+    @issue.set_due_date_from_deliverable
+  end
+
+  it 'should do nothing if the issue has no deliverable' do
+    @issue.should_not_receive(:due_date=)
+    @issue.stub!(:deliverable).and_return(nil)
+    @issue.set_due_date_from_deliverable
+  end
+
+  it "should do nothing if the issue's deliverable has no due date" do
+    @issue.should_not_receive(:due_date=)
+    @issue.stub!(:deliverable).and_return(mock('deliverable', :due => nil))
+    @issue.set_due_date_from_deliverable
+  end
+
+  it "should do nothing if the issue's deliverable has the same due date" do
+    today = Date.today
+    @issue.due_date = today
+    @issue.should_not_receive(:due_date=)
+    @issue.stub!(:deliverable).and_return(mock('deliverable', :due => today))
+    @issue.set_due_date_from_deliverable
+  end
+
+  it "should set the due date of the issue to the deliverable's if they differ" do
+    today = Date.today
+    yesterday = Date.yesterday
+    @issue.due_date = yesterday
+    @issue.should_receive(:due_date=).with(today)
+    @issue.stub!(:deliverable).and_return(mock('deliverable', :due => today))
+    @issue.set_due_date_from_deliverable
+  end
 
 end
 

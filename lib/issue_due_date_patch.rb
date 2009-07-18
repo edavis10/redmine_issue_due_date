@@ -66,9 +66,7 @@ module IssueDueDate
 
       # Set the +due_date+ based on the deliverable's due_date
       def set_due_date_from_deliverable
-        return false unless deliverable_defined?
-        
-        unless self.deliverable.blank? || self.deliverable.due.blank? || self.due_date == self.deliverable.due
+        if (deliverable_defined? && deliverable && deliverable.due != due_date)
           self.due_date = self.deliverable.due
           return true
         else
