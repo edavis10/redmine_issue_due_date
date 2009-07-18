@@ -90,7 +90,9 @@ module IssueDueDate
         return false unless deliverable_defined?
 
         orig_issue = Issue.find_by_id(self.id) || Issue.new
-        orig_date = orig_issue.deliverable.due unless orig_issue.deliverable.nil?
+        return false unless orig_issue.deliverable
+
+        orig_date = orig_issue.deliverable.due
         orig_date ||= nil
         
         return orig_date == self.due_date
