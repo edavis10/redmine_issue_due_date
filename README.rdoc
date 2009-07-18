@@ -1,11 +1,6 @@
 = Issue Due Date
 
-__DESCRIPTION__
-
-
-== Features
-
-* __FEATURE__
+Issue Due Date will set the Issue due dates to the due dates of versions or deliverables.  It will also track due date so if a Version's due date is changed, all of it's issues with the same due date will also be changed.
 
 == Getting the plugin
 
@@ -16,28 +11,45 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 
 1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins 
 2. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
+3. (optional step) If you would like to convert of the existing issues, backup your database and run the rake task:
+
+    rake issue_due_date_plugin:update_due_dates RAILS_ENV=production
 
 == Usage
 
-The plugin should transparently set the Issue due date whenever an Issue is saved to be:
+The plugin should set the Issue's due date whenever an Issue is saved to be:
 
-* Issue due date or
+* Specific Issue due date or
 * Version due date or
 * Deliverable due date
 
-The plugin should also hook into the Version class and have it mass update all issues assigned to the Version when the Version is saved. Issues will be changed when they:
+The plugin will also hook into Versions so when the versions' due date is updated, all issues assigned to the Version will be updated if they:
 
 * Do not have a due date or
 * Have a due date equal to the Version's old date
 
 Example:
-Version X due on 2008-01-01 with Issues A (due on 2008-01-01), Issue B (2008-02-01), and Issue C (no due date). Changing Version X's date to 2008-01-15 will update the due date of Issue A and Issue C to 2008-01-15. Issue B's due date will stay 2008-02-01.
 
-When reassigning a version, if the issue due date matched the old version date, the issue should change it's due date to match the new version.
+Version X due on 2008-01-01 with:
 
-Example: if i move an issue from version A to version B and the date matches the version A, then the date should change to version B.
+* Issues A (due on 2008-01-01)
+* Issue B (due on 2008-02-01)
+* Issue C (no due date)
 
-The same behavior will be for Deliverables, if the Deliverables plugin is installed.
+Changing Version X's date to 2008-01-15 will update the due date of:
+
+* Issue A to 2008-01-15. It has the same due date so it's "following" the version.
+* Issue C to 2008-01-15. It did not have a due date so it was given the version's due date.
+* Issue B's due date will stay 2008-02-01.
+
+When reassigning an issue to a different version, if the issue due date matched the old version date, the issue will change it's due date to match the new version.
+
+Example:
+
+1. I have an issue assigned to Version A with a date that matches Version A
+2. If I change the issue to be assigned to Version B, then the date should change to version B's due date.
+
+The same behavior will be for Deliverables, if the +budget_plugin+ is installed.
 
 == License
 
