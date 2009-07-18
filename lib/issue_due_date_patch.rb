@@ -10,8 +10,7 @@ module IssueDueDate
       # Same as typing in the class 
       base.class_eval do
         unloadable # Send unloadable so it will not be unloaded in development
-        alias_method :redmine_before_save, :before_save
-        alias_method :before_save, :issue_due_date_before_save
+        before_save :update_due_date
       end
     end
     
@@ -33,7 +32,7 @@ module IssueDueDate
       # * Use the new Version due date or
       # * Use the new Deliverable due date
       #
-      def issue_due_date_before_save
+      def update_due_date
         
         if self.due_date.blank?
           # Doesn't have a due date already
@@ -51,8 +50,8 @@ module IssueDueDate
             self.due_date = self.deliverable.due unless self.deliverable.nil?
           end
         end
-        
-        return redmine_before_save
+
+        return true
       end
 
       # Set the +due_date+ based on the version's due_date
