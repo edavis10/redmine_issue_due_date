@@ -3,35 +3,16 @@ require_dependency 'issue'
 module IssueDueDate
   module IssuePatch
     def self.included(base)
-      base.extend(ClassMethods)
-
       base.send(:include, InstanceMethods)
-
-      # Same as typing in the class 
       base.class_eval do
         unloadable # Send unloadable so it will not be unloaded in development
         before_save :update_due_date
       end
     end
     
-    module ClassMethods
-    end
-    
     module InstanceMethods
-      
-      # Aliased to +before_save+ when included.  This will update the issue's due_date like so
-      # 
-      # Precondition: due_date is empty
-      #
-      # * Use the Version due date or
-      # * Use the Deliverable due date
-      #
-      # Precondition: due_date has a version or deliverable due_date already and the Version or
-      #               Deliverable is changing.
-      #
-      # * Use the new Version due date or
-      # * Use the new Deliverable due date
-      #
+      # Updates the due date by checking the due_date set on the
+      # assigned Version or Deliverable
       def update_due_date
         
         if self.due_date.blank?
