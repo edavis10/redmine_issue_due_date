@@ -17,30 +17,41 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 
 == Usage
 
-The plugin should set the Issue's due date whenever an Issue is saved to be:
+The plugin entirely works in the background when Issues, Versions, or Deliverables are saved.  The plugin handles three separate states:
 
-* Specific Issue due date or
-* Version due date or
-* Deliverable due date
+=== Issue edits
 
-The plugin will also hook into Versions so when the versions' due date is updated, all issues assigned to the Version will be updated if they:
+When an issue is edited, the plugin will check:
+
+* If the issue's due date has been set on the Issue or
+* the deliverable has a due date or
+* the version has a due date
+
+If any of those are true, the issue will have it's due date updated.  If multiple of them are true, the first one will be used.
+
+=== Version or Deliverable edits
+
+The plugin will also hook into Versions so when the version's due date is updated, all issues assigned to the Version will be updated if the issues:
 
 * Do not have a due date or
 * Have a due date equal to the Version's old date
 
 Example:
 
-Version X due on 2008-01-01 with:
-
-* Issues A (due on 2008-01-01)
-* Issue B (due on 2008-02-01)
-* Issue C (no due date)
+* Version X with a due of 2008-01-01 and issues of
+  * Issues A (due on 2008-01-01)
+  * Issue B (due on 2008-02-01)
+  * Issue C (no due date)
 
 Changing Version X's date to 2008-01-15 will update the due date of:
 
-* Issue A to 2008-01-15. It has the same due date so it's "following" the version.
+* Issue A to 2008-01-15. It has the same due date as the version, so it's "following" the version.
 * Issue C to 2008-01-15. It did not have a due date so it was given the version's due date.
 * Issue B's due date will stay 2008-02-01.
+
+Deliverables follow the exact same behavior.
+
+=== Version or Deliverable reassignments
 
 When reassigning an issue to a different version, if the issue due date matched the old version date, the issue will change it's due date to match the new version.
 
@@ -49,7 +60,7 @@ Example:
 1. I have an issue assigned to Version A with a date that matches Version A
 2. If I change the issue to be assigned to Version B, then the date should change to version B's due date.
 
-The same behavior will be for Deliverables, if the +budget_plugin+ is installed.
+Deliverables follow the exact same behavior.
 
 == License
 
