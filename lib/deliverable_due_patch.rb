@@ -3,7 +3,7 @@ begin
 
   if Object.const_defined?("Deliverable")
     module IssueDueDate
-      module DeliverableDuePatch
+      module DeliverablePatch
         def self.included(base)
           base.extend(ClassMethods)
 
