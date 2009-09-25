@@ -27,7 +27,8 @@ begin
           def update_issue_due_dates
             self.issues.each do |issue|
               if issue.due_date.blank? || issue.due_date_set_by_deliverable?
-                issue.update_attribute(:due_date, self.due)
+                issue.due_date = self.due
+                issue.save
               end
             end
           end
