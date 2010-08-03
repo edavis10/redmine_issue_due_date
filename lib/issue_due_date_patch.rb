@@ -59,6 +59,7 @@ module IssueDueDate
         return !!(deliverable_defined? &&
                   orig_issue &&
                   orig_issue.deliverable &&
+                  orig_issue.deliverable.respond_to?(:due) &&
                   orig_issue.deliverable.due == self.due_date)
       end
       
