@@ -26,3 +26,5 @@ module IssueDueDate
     end    
   end
 end
+
+Version.send(:include, IssueDueDate::VersionPatch)

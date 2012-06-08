@@ -70,3 +70,5 @@ module IssueDueDate
     end    
   end
 end
+
+Issue.send(:include, IssueDueDate::IssuePatch)

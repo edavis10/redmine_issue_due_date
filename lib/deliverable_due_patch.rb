@@ -37,6 +37,7 @@ begin
         end    
       end
     end
+    Deliverable.send(:include, IssueDueDate::DeliverablePatch)
   end
 rescue LoadError
   # Skip
