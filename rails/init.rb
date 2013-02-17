@@ -4,8 +4,7 @@ require 'issue_due_date_patch'
 require 'version_due_date_patch'
 require 'deliverable_due_patch'
 
-require 'dispatcher'
-Dispatcher.to_prepare do
+Rails.configuration.to_prepare do
   Issue.send(:include, IssueDueDate::IssuePatch)
   Version.send(:include, IssueDueDate::VersionPatch)
   Deliverable.send(:include, IssueDueDate::DeliverablePatch) if Object.const_defined?("Deliverable")
