@@ -4,14 +4,15 @@ Issue Due Date will set the Issue due dates to the due dates of versions or deli
 
 == Getting the plugin
 
-A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-misc/files] or from {GitHub}[http://github.com/edavis10/redmine_issue_due_date]
+A copy of the plugin can be downloaded from {GitHub}[http://github.com/dra/redmine_issue_due_date]
 
 
 == Installation and Setup
 
 1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins 
 2. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
-3. (optional step) If you would like to convert of the existing issues, backup your database and run the rake task:
+3. Run rake redmine:plugins:migrate
+4. (optional step) If you would like to convert of the existing issues, backup your database and run the rake task:
 
     rake issue_due_date_plugin:update_due_dates RAILS_ENV=production
 
@@ -26,8 +27,10 @@ When an issue is edited, the plugin will check:
 * If the issue's due date has been set on the Issue or
 * the deliverable has a due date or
 * the version has a due date
+* the issues project has default_days_due set
 
 If any of those are true, the issue will have it's due date updated.  If multiple of them are true, the first one will be used.
+Hint: At the moment there is no way to set Project.default_days_due via Redmine, one has to do it directly to the database.
 
 === Version or Deliverable edits
 
