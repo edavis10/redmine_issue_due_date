@@ -16,8 +16,10 @@ module IssueDueDate
       def update_due_date
         if deliverable_defined? && (due_date.blank? || due_date_set_by_deliverable?)
           set_due_date_from_deliverable
-        elsif due_date.blank? || due_date_set_by_version?
+        elsif due_date.blank? && due_date_set_by_version?
           set_due_date_from_version
+        elsif due_date.blank? && due_date_set_by_project?
+          set_due_date_from_project
         end
 
         return true
@@ -31,6 +33,12 @@ module IssueDueDate
         else
           return false
         end
+      end
+
+      # Set the +due_date+ based on the projects due_date default
+      def set_due_date_from_project
+        self.due_date = (Time.now + self.project.default_days_due.to_i.days).change(:sec => 0).change(:min => 0).change(:hour => 0)
+        return true
       end
 
       # Set the +due_date+ based on the deliverable's due_date
@@ -52,6 +60,13 @@ module IssueDueDate
                   orig_issue.fixed_version.due_date == self.due_date)
       end
       
+      # Is the issue's +due_date+ defined by project settings?
+      def due_date_set_by_project?
+        return false if project.default_days_due.nil?
+        return true
+      end
+
+
       # Is the issue's +due_date+ the same as it's old deliverable?
       def due_date_set_by_deliverable?
         orig_issue = Issue.find_by_id(self.id)
